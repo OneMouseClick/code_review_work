@@ -1,31 +1,35 @@
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class CalculatorTest {
-
+    private Calculator calc = new Calculator();
     @Test
     void add() {
-        //TODO inser your realisation in test-method add
+        assertEquals(5, calc.add(2,3));
+        assertEquals(-4, calc.add(-1,-3));
     }
 
     @Test
     void dif() {
-        //TODO inser your realisation in test-method dif
+        assertEquals(5, calc.dif(10,5));
+        assertEquals(-4, calc.dif(-1,3));
     }
 
     @Test
-    void div() {
-        //TODO inser your realisation in test-method div
+    void div() throws Exception {
+        assertEquals(5, calc.div(10,2));
+        assertEquals(-5, calc.div(10,-2));
+        assertThrows(Exception.class, () -> calc.div(1, 0), "Can not divide zero");
     }
 
     @Test
     void times() {
-        //TODO inser your realisation in test-method times
+        assertEquals(6, calc.times(2,3));
+        assertEquals(-25, calc.times(-5,5));
     }
 
     @Test
-    void solver() {
-        //TODO inser your realisation in test-method solver
+    void solver() throws Exception {
+        assertEquals(28, calc.solver());
     }
 }
