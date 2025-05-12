@@ -1,10 +1,3 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
-
 name: Java CI with Gradle
 
 on:
@@ -13,25 +6,29 @@ on:
   pull_request:
     branches: [ "main", "sharapovdv" ]
   schedule:
-    - cron: '30 12 * * 3'
-    - cron: '0 22 * * 5'
-    
+    - cron: '30 12 * * 3'  # Среда 12:30 UTC
+    - cron: '0 22 * * 5'   # Пятница 22:00 UTC
 
 jobs:
   build:
     strategy:
       matrix:
-        java: [11, 13, 17]
+        java: ['11', '17', '21']  # LTS-версии (Temurin не поддерживает 13)
         os: [ubuntu-latest, macos-latest, windows-latest]
+        include:
+          - java: '13'            # Для не-LTS версий
+            distribution: 'zulu'  # Альтернативный дистрибутив
       fail-fast: false
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
+      
       - name: Set up JDK ${{ matrix.java }}
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4  # Обновлено до v4
         with:
           java-version: ${{ matrix.java }}
-          distribution: 'temurin'
+          distribution: ${{ matrix.distribution || 'temurin' }}  # По умолчанию Temurin
+
       - name: Build and Test with Gradle
         uses: gradle/gradle-build-action@v3
         with:
